@@ -95,26 +95,47 @@
       const canGen = plan !== "free" || used < FREE_LIMIT;
       const remaining = plan === "free" ? Math.max(0, FREE_LIMIT - used) : null;
 
-      async function generate() {
-        if (!topic.trim() || loading) return;
-        if (!canGen) { setLimitModal(true); return; }
-        setLoading(true); setResult(""); setCopied(false);
-        const pl = PLATFORMS.find(p => p.id === platform)?.label;
-        const tn = TONES.find(t => t.id === tone)?.label;
-        const prompt = `أنت خبير في كتابة المحتوى لمنصات السوشيال ميديا. اكتب منشوراً ${tn} لمنصة ${pl} عن: "${topic}". المتطلبات: استخدم العربية الفصيحة مع لمسة عصرية، أضف إيموجي مناسبة، أضف هاشتاقات في النهاية، اكتب المنشور فقط بدون مقدمة.`;
-        try {
-          const res = await fetch("https://api.anthropic.com/v1/messages", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01" },
-            body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, messages: [{ role: "user", content: prompt }] }),
-          });
-          const data = await res.json();
-          setResult(data.content?.map(i => i.text || "").join("\n") || "حدث خطأ.");
-          if (plan === "free") setUsed(u => u + 1);
-        } catch { setResult("حدث خطأ في الاتصال."); }
-        setLoading(false);
+    async function generate() {
+    if (!topic.trim() || loading) return;
+    if (!canGen) { setLimitModal(true); return; }
+
+    setLoading(true);
+    setResult("");
+    setCopied(false);
+
+    const pl = PLATFORMS.find(p => p.id === platform)?.label;
+    const tn = TONES.find(t => t.id === tone)?.label;
+
+    const promptMessage = `أنت خبير محترف في إدارة منصات التواصل الاجتماعي. اكتب منشوراً لمنصة (${pl}) بأسلوب وطابع (${tn}). موضوع المنشور هو: "${topic}". صغ المحتوى بطريقة جذابة ومناسبة للمنصة، واحرص على إضافة تنسيق رائع (إيموجي، أسطر جديدة)، وفي نهاية المنشور أضف الهاشتاغات (Hashtags) الأكثر تفاعلاً وقوة والمتعلقة بالموضوع.`;
+
+    try {
+      const response = await fetch('/.netlify/functions/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt: promptMessage })
+      });
+
+      if (!response.ok) {
+        throw new Error('فشل الاتصال بالسيرفر الوسيط');
       }
 
+      const data = await response.json();
+
+      if (data && data.content && data.content[0] && data.content[0].text) {
+        setResult(data.content[0].text);
+        if (plan === "free") setUsed(u => u + 1);
+      } else {
+        setResult("حدث خطأ في معالجة البيانات المستلمة.");
+      }
+    } catch (error) {
+      console.error('Error details:', error);
+      setResult("حدث خطأ في الاتصال.");
+    } finally {
+      setLoading(false);
+    }
+  }
       function copy() { navigator.clipboard.writeText(result); setCopied(true); setTimeout(() => setCopied(false), 2000); }
       function subscribe(p) { setSelPlan(p); setPayPage(true); setPage("pricing"); }
       function confirmPay() { if (!email.trim()) return; setPlan(selPlan); setPayPage(false); setPage("success"); }
