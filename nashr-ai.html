@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نشر AI - كاتب المحتوى الذكي</title>
+  <meta name="description" content="أنشئ محتوى سوشيال ميديا احترافي في ثوانٍ بالذكاء الاصطناعي" />
+  <meta name="keywords" content="كاتب محتوى, سوشيال ميديا, ذكاء اصطناعي, نشر, اردن" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fafaf9; font-family: 'Noto Kufi Arabic', sans-serif; direction: rtl; color: #1c1917; }
+    button { font-family: inherit; cursor: pointer; border: none; }
+    input, textarea { font-family: inherit; }
+    textarea { resize: none; }
+    .nav-link { background: none; border: none; color: #78716c; font-size: 14px; font-weight: 600; cursor: pointer; padding: 6px 12px; border-radius: 8px; transition: all .2s; }
+    .nav-link:hover { color: #1c1917; background: #f5f5f4; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: #ede9fe; color: #7c3aed; border-radius: 100px; padding: 6px 16px; font-size: 13px; font-weight: 700; margin-bottom: 24px; }
+    .platform-btn { border: 2px solid #e7e5e4; background: white; border-radius: 16px; padding: 14px 8px; cursor: pointer; transition: all .2s; text-align: center; }
+    .platform-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .tone-btn { border: 2px solid #e7e5e4; background: white; border-radius: 100px; padding: 8px 18px; font-size: 13px; font-weight: 700; color: #78716c; transition: all .2s; }
+    .tone-btn:hover { border-color: #a78bfa; color: #7c3aed; }
+    .gen-btn { width: 100%; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; color: white; background: linear-gradient(135deg,#7c3aed,#a855f7); border: none; cursor: pointer; transition: all .25s; box-shadow: 0 4px 20px rgba(124,58,237,0.3); }
+    .gen-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,58,237,0.4); }
+    .gen-btn:disabled { background: #e7e5e4; color: #a8a29e; box-shadow: none; cursor: not-allowed; transform: none; }
+    .card { background: white; border: 1px solid #e7e5e4; border-radius: 24px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+    .plan-card { background: white; border: 2px solid #e7e5e4; border-radius: 24px; padding: 32px 24px; text-align: center; transition: all .25s; position: relative; }
+    .plan-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.1); }
+    .feature-item { background: white; border: 1px solid #e7e5e4; border-radius: 18px; padding: 22px 18px; text-align: center; transition: transform .2s; }
+    .feature-item:hover { transform: translateY(-4px); }
+    .result-box { background: #f9fafb; border: 1px solid #e7e5e4; border-radius: 18px; padding: 22px; border-right: 4px solid #7c3aed; animation: fadeUp .4s ease forwards; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-box { background: white; border-radius: 24px; padding: 36px; max-width: 500px; width: 100%; box-shadow: 0 24px 64px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto; }
+    .warning-bar { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 10px 16px; font-size: 13px; color: #92400e; font-weight: 600; margin-bottom: 16px; }
+    .footer { background: #1c1917; color: #a8a29e; padding: 48px 24px 32px; margin-top: 60px; }
+    .sticky-nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,249,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #e7e5e4; }
+    .upgrade-pill { background: linear-gradient(135deg,#7c3aed,#a855f7); color: white; border-radius: 100px; padding: 7px 16px; font-size: 13px; font-weight: 800; border: none; cursor: pointer; transition: all .2s; }
+    .upgrade-pill:hover { box-shadow: 0 4px 16px rgba(124,58,237,0.4); transform: translateY(-1px); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; margin-left: 8px; vertical-align: middle; }
+    input:focus, textarea:focus { outline: 2px solid #7c3aed; outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    const PLATFORMS = [
+      { id: "instagram", label: "إنستغرام", icon: "📸", color: "#E1306C", bg: "#fce4ec" },
+      { id: "twitter", label: "تويتر", icon: "🐦", color: "#1DA1F2", bg: "#e3f2fd" },
+      { id: "linkedin", label: "لينكدإن", icon: "💼", color: "#0077B5", bg: "#e1f0fa" },
+      { id: "tiktok", label: "تيك توك", icon: "🎵", color: "#ff0050", bg: "#fff0f3" },
+    ];
+
+    const TONES = [
+      { id: "professional", label: "احترافي", emoji: "💼" },
+      { id: "funny", label: "مرح", emoji: "😄" },
+      { id: "motivational", label: "تحفيزي", emoji: "🔥" },
+      { id: "informative", label: "تثقيفي", emoji: "📚" },
+    ];
+
+    const PLANS = [
+      { id: "free", name: "مجاني", price: "0", sub: "", color: "#64748b", features: ["5 منشورات يومياً","جميع المنصات","جميع الأساليب"], cta: "باقتك الحالية", icon: "🆓" },
+      { id: "pro", name: "Pro", price: "5", sub: "دينار/شهر", color: "#7c3aed", features: ["منشورات غير محدودة","جميع المنصات","جميع الأساليب","دعم أولوية"], cta: "اشترك الآن", icon: "⭐" },
+      { id: "proplus", name: "Pro+", price: "9", sub: "دينار/شهر", color: "#059669", features: ["منشورات غير محدودة","جميع المنصات","جميع الأساليب","دعم 24/7","ميزات حصرية"], cta: "اشترك الآن", icon: "👑" },
+    ];
+
+    const ANTHROPIC_KEY = ""; // ضع مفتاحك هنا
+
+    function App() {
+      const [page, setPage] = useState("home");
+      const [platform, setPlatform] = useState("instagram");
+      const [tone, setTone] = useState("professional");
+      const [topic, setTopic] = useState("");
+      const [result, setResult] = useState("");
+      const [loading, setLoading] = useState(false);
+      const [copied, setCopied] = useState(false);
+      const [used, setUsed] = useState(0);
+      const [plan, setPlan] = useState("free");
+      const [limitModal, setLimitModal] = useState(false);
+      const [selPlan, setSelPlan] = useState(null);
+      const [payPage, setPayPage] = useState(false);
+      const [email, setEmail] = useState("");
+      const [privacyOpen, setPrivacyOpen] = useState(false);
+      const [termsOpen, setTermsOpen] = useState(false);
+
+      const FREE_LIMIT = 5;
+      const canGen = plan !== "free" || used < FREE_LIMIT;
+      const remaining = plan === "free" ? Math.max(0, FREE_LIMIT - used) : null;
+
+      async function generate() {
+        if (!topic.trim() || loading) return;
+        if (!canGen) { setLimitModal(true); return; }
+        setLoading(true); setResult(""); setCopied(false);
+        const pl = PLATFORMS.find(p => p.id === platform)?.label;
+        const tn = TONES.find(t => t.id === tone)?.label;
+        const prompt = `أنت خبير في كتابة المحتوى لمنصات السوشيال ميديا. اكتب منشوراً ${tn} لمنصة ${pl} عن: "${topic}". المتطلبات: استخدم العربية الفصيحة مع لمسة عصرية، أضف إيموجي مناسبة، أضف هاشتاقات في النهاية، اكتب المنشور فقط بدون مقدمة.`;
+        try {
+          const res = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01" },
+            body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, messages: [{ role: "user", content: prompt }] }),
+          });
+          const data = await res.json();
+          setResult(data.content?.map(i => i.text || "").join("\n") || "حدث خطأ.");
+          if (plan === "free") setUsed(u => u + 1);
+        } catch { setResult("حدث خطأ في الاتصال."); }
+        setLoading(false);
+      }
+
+      function copy() { navigator.clipboard.writeText(result); setCopied(true); setTimeout(() => setCopied(false), 2000); }
+      function subscribe(p) { setSelPlan(p); setPayPage(true); setPage("pricing"); }
+      function confirmPay() { if (!email.trim()) return; setPlan(selPlan); setPayPage(false); setPage("success"); }
+
+      return (
+        <div>
+          {/* NAV */}
+          <nav className="sticky-nav">
+            <div style={{maxWidth:1100,margin:"0 auto",padding:"12px 24px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+              <button onClick={() => setPage("home")} style={{background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:20,fontWeight:900,color:"#7c3aed"}}>✨ نشر AI</span>
+              </button>
+              <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                {plan !== "free" && <span style={{fontSize:12,fontWeight:700,color:"#7c3aed",background:"#ede9fe",padding:"4px 12px",borderRadius:100}}>{PLANS.find(p=>p.id===plan)?.name} ✓</span>}
+                {plan === "free" && remaining !== null && <span style={{fontSize:12,color:"#a8a29e",fontWeight:600}}>{remaining}/5 منشور</span>}
+                <button className="nav-link" onClick={() => setPage("pricing")}>الأسعار</button>
+                {plan === "free" && <button className="upgrade-pill" onClick={() => setPage("pricing")}>ترقية ⭐</button>}
+              </div>
+            </div>
+          </nav>
+
+          {/* HOME */}
+          {page === "home" && (
+            <div>
+              <section style={{textAlign:"center",padding:"80px 24px 64px",background:"linear-gradient(180deg,#f5f3ff 0%,#fafaf9 100%)"}}>
+                <div className="hero-badge">🇯🇴 مصمم للسوق الأردني والعربي</div>
+                <h1 style={{fontSize:"clamp(30px,6vw,56px)",fontWeight:900,lineHeight:1.2,marginBottom:20}}>
+                  أنشئ محتوى سوشيال ميديا<br/><span style={{color:"#7c3aed"}}>بالذكاء الاصطناعي</span>
+                </h1>
+                <p style={{fontSize:17,color:"#78716c",maxWidth:500,margin:"0 auto 40px",lineHeight:1.7}}>
+                  اكتب موضوعك واحصل على منشور احترافي جاهز للنشر في ثوانٍ
+                </p>
+                <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+                  <button className="gen-btn" style={{width:"auto",padding:"14px 44px",fontSize:17}} onClick={() => setPage("tool")}>ابدأ مجاناً 🚀</button>
+                  <button style={{background:"white",border:"2px solid #e7e5e4",borderRadius:14,padding:"14px 28px",fontSize:15,fontWeight:700,color:"#1c1917"}} onClick={() => setPage("pricing")}>عرض الأسعار</button>
+                </div>
+                <p style={{marginTop:16,fontSize:13,color:"#a8a29e"}}>5 منشورات مجانية يومياً — لا حاجة لبطاقة ائتمان</p>
+              </section>
+
+              <section style={{maxWidth:860,margin:"0 auto",padding:"20px 24px 60px"}}>
+                <h2 style={{textAlign:"center",fontSize:26,fontWeight:900,marginBottom:32}}>لماذا نشر AI؟</h2>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:16}}>
+                  {[{icon:"⚡",t:"نتائج فورية",d:"منشورك جاهز في أقل من 10 ثوانٍ"},{icon:"📱",t:"4 منصات",d:"إنستغرام، تويتر، لينكدإن، تيك توك"},{icon:"🎭",t:"4 أساليب",d:"احترافي، مرح، تحفيزي، تثقيفي"},{icon:"#️⃣",t:"هاشتاقات تلقائية",d:"هاشتاقات ذكية مع كل منشور"}].map((f,i) => (
+                    <div key={i} className="feature-item">
+                      <div style={{fontSize:32,marginBottom:10}}>{f.icon}</div>
+                      <div style={{fontWeight:800,fontSize:15,marginBottom:6}}>{f.t}</div>
+                      <div style={{fontSize:12,color:"#78716c",lineHeight:1.5}}>{f.d}</div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section style={{background:"linear-gradient(135deg,#7c3aed,#a855f7)",padding:"48px 24px",textAlign:"center"}}>
+                <h2 style={{color:"white",fontSize:26,fontWeight:900,marginBottom:12}}>جاهز تبدأ؟</h2>
+                <p style={{color:"rgba(255,255,255,0.8)",fontSize:15,marginBottom:28}}>انضم لآلاف المستخدمين الذين يوفرون وقتهم مع نشر AI</p>
+                <button className="gen-btn" style={{width:"auto",padding:"14px 44px",background:"white",color:"#7c3aed"}} onClick={() => setPage("tool")}>ابدأ الآن مجاناً</button>
+              </section>
+            </div>
+          )}
+
+          {/* TOOL */}
+          {page === "tool" && (
+            <div style={{maxWidth:640,margin:"0 auto",padding:"36px 20px 60px"}}>
+              <div className="card" style={{padding:"clamp(22px,4vw,40px)"}}>
+                <h2 style={{fontWeight:900,fontSize:22,marginBottom:28,textAlign:"center"}}>✨ أنشئ منشورك</h2>
+                <div style={{marginBottom:24}}>
+                  <label style={{display:"block",fontWeight:800,fontSize:13,marginBottom:12,color:"#44403c"}}>📱 اختر المنصة</label>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}}>
+                    {PLATFORMS.map(p => (
+                      <button key={p.id} className="platform-btn" onClick={() => setPlatform(p.id)}
+                        style={{background:platform===p.id?p.bg:"white",border:`2px solid ${platform===p.id?p.color:"#e7e5e4"}`}}>
+                        <div style={{fontSize:20,marginBottom:4}}>{p.icon}</div>
+                        <div style={{fontSize:11,fontWeight:700,color:platform===p.id?p.color:"#78716c"}}>{p.label}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div style={{marginBottom:24}}>
+                  <label style={{display:"block",fontWeight:800,fontSize:13,marginBottom:12,color:"#44403c"}}>🎭 أسلوب الكتابة</label>
+                  <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                    {TONES.map(t => (
+                      <button key={t.id} className="tone-btn" onClick={() => setTone(t.id)}
+                        style={{background:tone===t.id?"#ede9fe":"white",border:`2px solid ${tone===t.id?"#7c3aed":"#e7e5e4"}`,color:tone===t.id?"#7c3aed":"#78716c"}}>
+                        {t.emoji} {t.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div style={{marginBottom:22}}>
+                  <label style={{display:"block",fontWeight:800,fontSize:13,marginBottom:12,color:"#44403c"}}>💡 موضوع المنشور</label>
+                  <div style={{position:"relative"}}>
+                    <textarea value={topic} onChange={e=>setTopic(e.target.value)} maxLength={300} rows={3}
+                      placeholder="مثال: إطلاق منتج جديد للعناية بالبشرة..."
+                      style={{width:"100%",background:"#fafaf9",border:"2px solid #e7e5e4",borderRadius:16,padding:"14px 16px 30px",color:"#1c1917",fontSize:15,lineHeight:1.7}} />
+                    <span style={{position:"absolute",bottom:10,left:14,fontSize:12,color:"#a8a29e"}}>{topic.length}/300</span>
+                  </div>
+                </div>
+                {plan==="free" && remaining!==null && remaining<=2 && remaining>0 && (
+                  <div className="warning-bar">⚠️ تبقى لك {remaining} منشور{remaining===1?"":"ات"} مجاني اليوم</div>
+                )}
+                <button className="gen-btn" onClick={generate} disabled={!topic.trim()||loading}>
+                  {loading ? <><span className="spinner"/>جاري الإنشاء...</> : "🚀 أنشئ المحتوى"}
+                </button>
+                {result && (
+                  <div className="result-box" style={{marginTop:24}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+                      <span style={{color:"#7c3aed",fontSize:13,fontWeight:800}}>✅ المحتوى جاهز</span>
+                      <button onClick={copy} style={{background:copied?"#d1fae5":"#ede9fe",border:`1px solid ${copied?"#6ee7b7":"#c4b5fd"}`,borderRadius:10,padding:"6px 14px",color:copied?"#065f46":"#7c3aed",fontSize:12,fontWeight:800}}>
+                        {copied?"✓ تم النسخ!":"📋 نسخ"}
+                      </button>
+                    </div>
+                    <p style={{color:"#1c1917",fontSize:14,lineHeight:1.9,whiteSpace:"pre-wrap",wordBreak:"break-word"}}>{result}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* PRICING */}
+          {page === "pricing" && !payPage && (
+            <div style={{maxWidth:960,margin:"0 auto",padding:"48px 20px 60px"}}>
+              <h1 style={{textAlign:"center",fontSize:"clamp(24px,5vw,38px)",fontWeight:900,marginBottom:8}}>اختر باقتك</h1>
+              <p style={{textAlign:"center",color:"#78716c",marginBottom:48,fontSize:16}}>ابدأ مجاناً، وطوّر عند الحاجة</p>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:20}}>
+                {PLANS.map(p => (
+                  <div key={p.id} className={`plan-card${p.id==="pro"?" featured":""}`} style={{border:`2px solid ${p.id==="pro"?"#7c3aed":"#e7e5e4"}`}}>
+                    {p.id==="pro" && <div style={{position:"absolute",top:-14,right:"50%",transform:"translateX(50%)",background:"linear-gradient(135deg,#7c3aed,#a855f7)",color:"white",borderRadius:100,padding:"4px 18px",fontSize:12,fontWeight:900}}>الأشهر 🔥</div>}
+                    {p.id==="proplus" && <div style={{position:"absolute",top:-14,right:"50%",transform:"translateX(50%)",background:"linear-gradient(135deg,#059669,#10b981)",color:"white",borderRadius:100,padding:"4px 18px",fontSize:12,fontWeight:900}}>الأقوى 👑</div>}
+                    <div style={{fontSize:32,marginBottom:12}}>{p.icon}</div>
+                    <h3 style={{color:p.color,fontSize:22,fontWeight:900,marginBottom:4}}>{p.name}</h3>
+                    <div style={{margin:"16px 0"}}>
+                      <span style={{fontSize:44,fontWeight:900}}>{p.price}</span>
+                      {p.sub && <span style={{color:"#78716c",fontSize:14}}> {p.sub}</span>}
+                    </div>
+                    <ul style={{listStyle:"none",marginBottom:24,textAlign:"right"}}>
+                      {p.features.map((f,i) => (
+                        <li key={i} style={{fontSize:13,color:"#44403c",padding:"7px 0",borderBottom:"1px solid #f5f5f4",display:"flex",gap:8,alignItems:"center"}}>
+                          <span style={{color:p.color,fontWeight:900}}>✓</span>{f}
+                        </li>
+                      ))}
+                    </ul>
+                    <button onClick={() => p.id!=="free" && plan!==p.id && subscribe(p.id)} disabled={p.id==="free"||plan===p.id}
+                      style={{width:"100%",padding:13,borderRadius:13,fontSize:14,fontWeight:900,
+                        background:plan===p.id?"#f5f5f4":p.id==="free"?"#f5f5f4":p.id==="pro"?"linear-gradient(135deg,#7c3aed,#a855f7)":"linear-gradient(135deg,#059669,#10b981)",
+                        color:plan===p.id||p.id==="free"?"#a8a29e":"white",border:"none",cursor:p.id==="free"||plan===p.id?"default":"pointer"}}>
+                      {plan===p.id?"✓ باقتك الحالية":p.cta}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* PAY */}
+          {page === "pricing" && payPage && (
+            <div style={{display:"flex",justifyContent:"center",padding:"48px 20px"}}>
+              <div className="card" style={{padding:36,maxWidth:440,width:"100%"}}>
+                <h2 style={{fontWeight:900,fontSize:24,marginBottom:6,textAlign:"center"}}>إتمام الاشتراك</h2>
+                <p style={{color:"#78716c",textAlign:"center",fontSize:14,marginBottom:28}}>
+                  باقة {PLANS.find(p=>p.id===selPlan)?.name} — {PLANS.find(p=>p.id===selPlan)?.price} دينار/شهر
+                </p>
+                <label style={{display:"block",fontWeight:700,fontSize:13,marginBottom:8}}>البريد الإلكتروني</label>
+                <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="example@email.com"
+                  style={{width:"100%",background:"#fafaf9",border:"2px solid #e7e5e4",borderRadius:12,padding:"12px 16px",fontSize:14,marginBottom:20,direction:"ltr"}} />
+                <div style={{background:"#f5f3ff",borderRadius:12,padding:16,marginBottom:24,textAlign:"center"}}>
+                  <p style={{color:"#7c3aed",fontSize:13,fontWeight:700,marginBottom:10}}>💳 طرق الدفع</p>
+                  <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
+                    {["CliQ 🇯🇴","Visa","Mastercard"].map(m => (
+                      <span key={m} style={{background:"white",border:"1px solid #e7e5e4",borderRadius:8,padding:"6px 14px",fontSize:13,fontWeight:700}}>{m}</span>
+                    ))}
+                  </div>
+                </div>
+                <button className="gen-btn" onClick={confirmPay} style={{marginBottom:10}}>تأكيد الاشتراك ✓</button>
+                <button onClick={() => setPayPage(false)} style={{width:"100%",padding:12,borderRadius:13,background:"transparent",border:"1px solid #e7e5e4",color:"#78716c",fontSize:14,fontWeight:600}}>إلغاء</button>
+                <p style={{textAlign:"center",fontSize:11,color:"#a8a29e",marginTop:14,lineHeight:1.6}}>
+                  بالمتابعة أنت توافق على{" "}
+                  <button onClick={() => setTermsOpen(true)} style={{background:"none",border:"none",color:"#7c3aed",textDecoration:"underline",cursor:"pointer",fontSize:11,fontFamily:"inherit"}}>شروط الخدمة</button>
+                  {" "}و{" "}
+                  <button onClick={() => setPrivacyOpen(true)} style={{background:"none",border:"none",color:"#7c3aed",textDecoration:"underline",cursor:"pointer",fontSize:11,fontFamily:"inherit"}}>سياسة الخصوصية</button>
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* SUCCESS */}
+          {page === "success" && (
+            <div style={{display:"flex",justifyContent:"center",alignItems:"center",minHeight:"70vh",padding:20}}>
+              <div className="card" style={{padding:"48px 36px",textAlign:"center",maxWidth:420}}>
+                <div style={{fontSize:72,marginBottom:16}}>🎉</div>
+                <h1 style={{fontSize:28,fontWeight:900,marginBottom:10}}>مبروك!</h1>
+                <p style={{color:"#78716c",fontSize:15,marginBottom:28,lineHeight:1.6}}>
+                  تم تفعيل باقة <strong style={{color:"#7c3aed"}}>{PLANS.find(p=>p.id===plan)?.name}</strong> بنجاح!
+                </p>
+                <button className="gen-btn" onClick={() => setPage("tool")}>ابدأ الاستخدام الآن</button>
+              </div>
+            </div>
+          )}
+
+          {/* LIMIT MODAL */}
+          {limitModal && (
+            <div className="modal-overlay" onClick={() => setLimitModal(false)}>
+              <div className="modal-box" onClick={e => e.stopPropagation()}>
+                <div style={{fontSize:56,textAlign:"center",marginBottom:16}}>🚀</div>
+                <h2 style={{fontSize:22,fontWeight:900,textAlign:"center",marginBottom:10}}>انتهت منشوراتك المجانية!</h2>
+                <p style={{color:"#78716c",textAlign:"center",fontSize:14,marginBottom:28,lineHeight:1.6}}>
+                  قم بالترقية للحصول على منشورات غير محدودة<br/>
+                  <strong style={{color:"#7c3aed"}}>بـ 5 دينار فقط شهرياً</strong>
+                </p>
+                <button className="gen-btn" style={{marginBottom:10}} onClick={() => { setLimitModal(false); setPage("pricing"); }}>ترقية الآن ⭐</button>
+                <button onClick={() => setLimitModal(false)} style={{width:"100%",padding:12,borderRadius:13,background:"transparent",border:"1px solid #e7e5e4",color:"#78716c",fontSize:14,fontWeight:600}}>لاحقاً</button>
+              </div>
+            </div>
+          )}
+
+          {/* PRIVACY */}
+          {privacyOpen && (
+            <div className="modal-overlay" onClick={() => setPrivacyOpen(false)}>
+              <div className="modal-box" onClick={e => e.stopPropagation()}>
+                <h2 style={{fontWeight:900,fontSize:22,marginBottom:20}}>سياسة الخصوصية</h2>
+                <p style={{color:"#44403c",fontSize:13,marginBottom:16,fontWeight:700}}>آخر تحديث: يناير 2026</p>
+                {[["1. المعلومات التي نجمعها","نجمع البريد الإلكتروني عند الاشتراك فقط. لا نحتفظ بالمحتوى بعد معالجته."],["2. كيف نستخدم معلوماتك","نستخدم بريدك لإدارة اشتراكك فقط. لا نبيع معلوماتك لأي طرف ثالث."],["3. ملفات الارتباط","نستخدم Cookies ضرورية لتشغيل الموقع فقط."],["4. الأمان","جميع الاتصالات مشفرة عبر HTTPS."],["5. حقوقك","يحق لك طلب حذف بياناتك عبر: privacy@nashr.ai"],].map(([t,b],i) => (
+                  <div key={i} style={{marginBottom:16}}>
+                    <strong style={{fontSize:14}}>{t}</strong>
+                    <p style={{color:"#78716c",fontSize:13,lineHeight:1.8,marginTop:4}}>{b}</p>
+                  </div>
+                ))}
+                <button className="gen-btn" onClick={() => setPrivacyOpen(false)} style={{marginTop:8}}>إغلاق</button>
+              </div>
+            </div>
+          )}
+
+          {/* TERMS */}
+          {termsOpen && (
+            <div className="modal-overlay" onClick={() => setTermsOpen(false)}>
+              <div className="modal-box" onClick={e => e.stopPropagation()}>
+                <h2 style={{fontWeight:900,fontSize:22,marginBottom:20}}>شروط الخدمة</h2>
+                <p style={{color:"#44403c",fontSize:13,marginBottom:16,fontWeight:700}}>آخر تحديث: يناير 2026</p>
+                {[["1. القبول","باستخدامك للموقع فأنت توافق على هذه الشروط."],["2. الاستخدام المقبول","يُسمح بالاستخدام القانوني فقط. يُحظر نشر محتوى مسيء أو مضلل."],["3. الاشتراكات","تُجدَّد تلقائياً. يمكنك الإلغاء في أي وقت."],["4. الملكية الفكرية","المحتوى الذي تولده ملك لك. نشر AI يحتفظ بحقوق التصميم والعلامة التجارية."],["5. التواصل","support@nashr.ai"],].map(([t,b],i) => (
+                  <div key={i} style={{marginBottom:16}}>
+                    <strong style={{fontSize:14}}>{t}</strong>
+                    <p style={{color:"#78716c",fontSize:13,lineHeight:1.8,marginTop:4}}>{b}</p>
+                  </div>
+                ))}
+                <button className="gen-btn" onClick={() => setTermsOpen(false)} style={{marginTop:8}}>إغلاق</button>
+              </div>
+            </div>
+          )}
+
+          {/* FOOTER */}
+          <footer className="footer">
+            <div style={{maxWidth:1000,margin:"0 auto"}}>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:32,marginBottom:40}}>
+                <div>
+                  <div style={{color:"white",fontWeight:900,fontSize:22,marginBottom:8}}>✨ نشر AI</div>
+                  <p style={{fontSize:13,lineHeight:1.7}}>أداة ذكاء اصطناعي لكتابة محتوى سوشيال ميديا احترافي — مصممة للسوق الأردني والعربي 🇯🇴</p>
+                </div>
+                <div>
+                  <div style={{color:"white",fontWeight:800,fontSize:14,marginBottom:12}}>الخدمة</div>
+                  <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                    {[["الرئيسية","home"],["الأداة","tool"],["الأسعار","pricing"]].map(([l,p]) => (
+                      <button key={p} onClick={() => setPage(p)} style={{background:"none",border:"none",color:"#a8a29e",fontSize:13,cursor:"pointer",textAlign:"right",fontFamily:"inherit"}}>{l}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div style={{color:"white",fontWeight:800,fontSize:14,marginBottom:12}}>القانوني</div>
+                  <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                    <button onClick={() => setPrivacyOpen(true)} style={{background:"none",border:"none",color:"#a8a29e",fontSize:13,cursor:"pointer",textAlign:"right",fontFamily:"inherit"}}>سياسة الخصوصية</button>
+                    <button onClick={() => setTermsOpen(true)} style={{background:"none",border:"none",color:"#a8a29e",fontSize:13,cursor:"pointer",textAlign:"right",fontFamily:"inherit"}}>شروط الخدمة</button>
+                  </div>
+                </div>
+                <div>
+                  <div style={{color:"white",fontWeight:800,fontSize:14,marginBottom:12}}>تواصل معنا</div>
+                  <p style={{fontSize:13,lineHeight:1.7}}>support@nashr.ai</p>
+                  <p style={{fontSize:13,marginTop:8}}>🇯🇴 عمّان، الأردن</p>
+                </div>
+              </div>
+              <div style={{borderTop:"1px solid #292524",paddingTop:24,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12}}>
+                <p style={{fontSize:12}}>© 2026 نشر AI — جميع الحقوق محفوظة</p>
+                <p style={{fontSize:12}}>مدعوم بالذكاء الاصطناعي من Anthropic ⚡</p>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
